@@ -15,7 +15,8 @@
     st  r1, (r4)             # p = &j
 
     ld  $0x4, r5             # r5 = 4
-    st  r5, (r4)             # *p = 4
+    ld  (r4), r7             # r7 = *p
+    st  r5, (r7)             # *p = 4
 
     ld  $0x2, r5             # r5 = 2
     ld  (r2, r5, 4), r3      # r3 = a[2]
@@ -43,13 +44,13 @@ j: .long 0x00000010
 .pos 0x3000
 p: .long 0x00000017
 .pos 0x4000
-a: .long 0x00000011
-   .long 0x00000012
-   .long 0x00000013
-   .long 0x00000014
-   .long 0x00000015
-   .long 0x00000016
-   .long 0x00000017
-   .long 0x00000018
-   .long 0x00000019
-   .long 0x0000001a
+a: .long 0x00000000
+   .long 0x00000001
+   .long 0x00000002
+   .long 0x00000003
+   .long 0x00000004
+   .long 0x00000005
+   .long 0x00000006
+   .long 0x00000007
+   .long 0x00000008
+   .long 0x00000009
