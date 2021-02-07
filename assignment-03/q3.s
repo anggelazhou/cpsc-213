@@ -1,7 +1,7 @@
 .pos 0x100
         
         ld $a, r0               # r0 = address of a
-        ld $3, r1               # r1 = 3
+        ld $0x03, r1            # r1 = 3
         st r1, (r0)             # a = 3
 
         dec r1                  # r1--
@@ -15,15 +15,15 @@
         add r0, r1              # r1 = p[a]
         st r3, (r1)             # p[a] = b[a]
 
-        ld $12, r1              # r1 = 12
-        add r1, r0              # r0 = p + 12 (p + (3*4))
-        ld (r2), r4             # r4 = b[0]
-        st r4, (r0)             # *(p+3) = b[0]
+        ld $0xc, r4             # r4 = 12
+        add r4, r0              # r0 = p + 12 (p + (3*4))
+        ld (r2), r3             # r3 = b[0]
+        st r3, (r0)             # *(p+3) = b[0]
 
-        ld $b, r4               # r4 = address of b (p)
-        inca r4                 # p++
+        ld $b, r3               # r4 = address of b (p)
+        inca r3                 # p++
         ld $p, r5               # r5 = address of p
-        st r4, (r5)             # store new value of p into memory
+        st r3, (r5)             # store new value of p into memory
 
         halt
 
@@ -31,7 +31,7 @@
 a:      .long 0x00000001
 .pos 0x2000
 p:      .long 0x00000001
-.pos 0x2000
+.pos 0x3000
 b:      .long 0x00000001
         .long 0x00000001
         .long 0x00000001
