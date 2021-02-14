@@ -16,24 +16,46 @@ struct Node {
  * Create a new node with no children.
  */
 struct Node* create (int value) {
-  // TODO
-  Node *node = malloc(sizeof(Node));
+  struct Node *node = malloc(sizeof(struct Node));
+  node->value = value;
+  node->parent = NULL;
+  node->left = NULL;
+  node->right = NULL;
 
-  return NULL;
+  return node;
 }
 
 /**
  * Insert the node n into the binary tree rooted by toNode.
  */
 void insert (struct Node* toNode, struct Node* n) {
-  // TODO
+  if (n->value <= toNode->value) {
+    if (toNode->left==NULL) {
+      toNode->left = n;
+      n->parent = toNode;
+    } else {
+      insert(toNode->left, n);
+    }
+  } else {
+    if (toNode->right==NULL) {
+      toNode->right = n;
+      n->parent = toNode;
+    } else {
+      insert(toNode->right, n);
+    }
+  }
+
 }
 
 /**
  * Print the contents entire binary tree in order of ascending integer value.
  */
 void printInOrder (struct Node* node) {
-  // TODO
+  if (node->left != NULL)
+    printInOrder(node->left);
+  printf ("%d\n", node->value);
+  if (node->right != NULL)
+    printInOrder(node->right);
 }
 
 /**
@@ -41,7 +63,10 @@ void printInOrder (struct Node* node) {
  * Each node in path indicates direction taken (i.e., left or right) from parent to arive at node.
  */
 void printPath (struct Node* node) {
-  // TODO
+    if (node->parent != NULL) {
+      printPath(node->parent);
+    }
+    printf("%s: %d\n", node->parent == NULL? "from root": node->parent->left == node? "left to": "right to", node->value);
 }
 
 /**
@@ -65,7 +90,7 @@ int main (int argc, char* argv[]) {
   if (root) {
     printf("In Order:\n");
     printInOrder (root);
-    printf("Path to %d:\n", 0);  // TODO: replace 0 with expression that gets value of lastNodeInserted
+    printf("Path to %d:\n", lastNodeInserted->value);
     printPath(lastNodeInserted);
   }
 }
