@@ -26,6 +26,17 @@ struct Node* create (int value) {
 }
 
 /**
+ * Free nodes after usage
+ */
+void freeMemory(struct Node* node) {
+  if (node->left != NULL)
+    freeMemory(node->left);
+  if (node->right != NULL)
+    freeMemory(node->right);
+  free(node);
+}
+
+/**
  * Insert the node n into the binary tree rooted by toNode.
  */
 void insert (struct Node* toNode, struct Node* n) {
@@ -92,5 +103,7 @@ int main (int argc, char* argv[]) {
     printInOrder (root);
     printf("Path to %d:\n", lastNodeInserted->value);
     printPath(lastNodeInserted);
+
+    freeMemory(root);
   }
 }
