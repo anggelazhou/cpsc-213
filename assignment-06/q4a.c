@@ -10,7 +10,7 @@ void method_200(int i, int j) {
     a[j] = a[j] + i;
 }
 
-void method_300() {
+int main() {
    
     a = malloc(10*sizeof(int));
     for (int i = 0; i < 10; i++) {
@@ -29,10 +29,6 @@ void method_300() {
     }
 
     free(a);
-}
-
-int main() {
-    method_300();
 }
 
 
