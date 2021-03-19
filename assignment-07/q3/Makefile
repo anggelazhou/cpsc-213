@@ -1,8 +1,8 @@
 CFLAGS += -std=gnu11 -g -I..
 MAIN_EXE = main
-MAIN_OBJ = main.o list.o tree.o str_element.o int_element.o ../refcount.o
+MAIN_OBJ = main.o list.o tree.o str_element.o int_element.o refcount.o
 SORT_EXE = sortmain
-SORT_OBJ = sortmain.o str_element.o int_element.o ../refcount.o
+SORT_OBJ = sortmain.o str_element.o int_element.o refcount.o
 
 EXES = $(MAIN_EXE) $(SORT_EXE)
 OBJS = $(MAIN_OBJ) $(SORT_OBJ)
@@ -20,7 +20,7 @@ tidy:
 main.o: main.c element.h int_element.h str_element.h list.h tree.h refcount.h
 list.o: list.c list.h refcount.h
 tree.o: tree.c tree.h refcount.h
-str_element.o 
-int_element.o 
-../refcount.o
-
+str_element.o:  str_element.c str_element.h
+int_element.o: int_element.c int_element.h
+refcount.o: refcount.c refcount.h
+sortmain.o: sortmain.c int_element.h str_element.h element.h

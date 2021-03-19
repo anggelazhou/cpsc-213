@@ -3,6 +3,7 @@
 **/*.class
 **/*.out
 **/*.o
+**/.vscode
 **/*.iml
 **/out/
 assignment-04/BinaryTree-java-to-C/BinaryTree
