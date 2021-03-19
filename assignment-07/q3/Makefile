@@ -16,3 +16,11 @@ clean:
 	rm -f $(EXES) $(OBJS)
 tidy:
 	rm -f $(OBJS)
+
+main.o: main.c element.h int_element.h str_element.h list.h tree.h refcount.h
+list.o: list.c list.h refcount.h
+tree.o: tree.c tree.h refcount.h
+str_element.o 
+int_element.o 
+../refcount.o
+
