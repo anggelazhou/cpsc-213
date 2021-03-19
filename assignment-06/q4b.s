@@ -40,7 +40,7 @@ main_loop:
     j    f               # jump to f
     inca r5              # pop sb
     ld   $y, r1          # r1 = &y
-    st   r0, (r1, r4, 4) # r0 = y[r4]
+    st   r0, (r1, r4, 4) # y[r4] = r0 (from f)
     br   main_loop       # goto main_loop
 main_end:
     ld   4(r5), r6       # retrieve saved return address from bottom of stack
