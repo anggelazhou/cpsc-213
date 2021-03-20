@@ -10,9 +10,8 @@ You may add your own private functions here too. */
 
 /* Forward reference to a int_element. You get to define the structure. */
 struct int_element_class {
-  void (*print)(struct int_element *);
-  void (*compare)(struct int_element *, struct int_element *);
-  int type;
+  void (*print)(struct element *);
+  void (*compare)(struct element *, struct element *);
 };
 
 struct int_element {
@@ -20,15 +19,34 @@ struct int_element {
   int    i;
 };
 
-void int_element_print(struct int_element * i_element) {
-  printf("%d", i_element->i);
+void int_element_print(struct element * element) {
+  if (is_int_element(element)) {
+      struct int_element * i_element = element;
+      printf("%d", i_element->i);
+  } else {
+      element->class->print(element);
+  }
 }
 
-int int_element_compare(struct int_element * i_e1, struct int_element * i_e2) {
-  return i_e1->i - i_e2->i;
+int int_element_compare(struct element * e1, struct element * e2) {
+      if (is_int_element(e1)) {
+        if (is_int_element(e2)) {
+          struct int_element *i_e1 = e1;
+          struct int_element *i_e2 = e2;
+          return i_e1->i - i_e2->i;
+        } else {
+            return -1;
+        }
+    } else {
+        if (is_int_element(e2)) {
+            return 1;
+        } else {
+            return e1->class->compare(e1, e2);
+        }
+    }
 }
 
-struct int_element_class  int_element_class= {int_element_print, int_element_compare, 0};
+struct int_element_class  int_element_class= {int_element_print, int_element_compare};
 
 void int_element_finalizer(void * p) {
    // struct int_element * i_e = p;
@@ -50,5 +68,5 @@ int int_element_get_value(struct int_element * i_element) {
 
 /* Static function that determines whether this is an int_element. */
 int is_int_element(struct element * element) {
-    return ((struct int_element *)element)->class->type == 0;
+    return ((struct int_element *)element)->class == &int_element_class;
 }
