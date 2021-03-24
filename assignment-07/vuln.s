@@ -14,18 +14,21 @@ main:
   ld $str1, r0
   st r0, (r5)
   gpc $6, r6
-  j print
+  j print             # print Please enter ...
+
   inca r5
   ld $0, r0
   mov r5, r1
   ld $256, r2
-  sys $0
+  sys $0             # reads name input
   mov r0, r4
+
   deca r5
   ld $str2, r0
   st r0, (r5)
   gpc $6, r6
-  j print
+  j print            # print Good luck, 
+
   inca r5
   ld $1, r0
   mov r5, r1
@@ -59,7 +62,7 @@ str1:
   .long 30
   .long _str1
 _str1:
-  .long 0x57656c63
+  .long 0x57656c63 # Welcome! Please enter a name: 
   .long 0x6f6d6521
   .long 0x20506c65
   .long 0x61736520
@@ -72,7 +75,7 @@ str2:
   .long 11
   .long _str2
 _str2:
-  .long 0x476f6f64
+  .long 0x476f6f64 # Good luck, 
   .long 0x206c7563
   .long 0x6b2c2000
 
@@ -80,7 +83,7 @@ str3:
   .long 43
   .long _str3
 _str3:
-  .long 0x54686520
+  .long 0x54686520 # The secret phrase is "squemish ossie"
   .long 0x73656372
   .long 0x65742070
   .long 0x68726173
