@@ -19,10 +19,33 @@ struct element *parse_string(char *str) {
   }
 }
 
+int cmpfunc (const void * a, const void * b) {
+  struct element * e1 = *(struct element **)a;
+  struct element * e2 = *(struct element **)b;
+  return e1->class->compare(e1, e2);
+}
+
 int main(int argc, char **argv) {
   /* TODO: Read elements into a new array using parse_string */
+  struct element * elements[argc-1];
+  for (int i=0; i<argc-1; i++) {
+    struct element *e = parse_string(argv[i+1]);
+    elements[i] = e;
+  }
+
   /* TODO: Sort elements with qsort */
+  qsort(elements, argc-1, sizeof(struct element *), cmpfunc);
   printf("Sorted: ");
+  
   /* TODO: Print elements, separated by a space */
+  for (int i=0; i<argc-1; i++) {
+    elements[i]->class->print(elements[i]);
+    printf(" ");
+  }
   printf("\n");
+  
+  // Free
+  for (int i=0; i<argc-1; i++) {
+    rc_free_ref(elements[i]);
+  }
 }
