@@ -8,24 +8,44 @@
 #include "disk.h"
 
 queue_t pending_read_queue;
-volatile int pending_reads;
+volatile int finished_last_read;
 
 void interrupt_service_routine() {
   // TODO
   void* val;
+  void* count;
   void (*callback)(void*,void*);
-  queue_dequeue (pending_read_queue, &val, NULL, &callback);
-  callback (val, NULL); 
+  queue_dequeue (pending_read_queue, &val, &count, &callback);
+  callback (val, count); 
 }
 
 void handleOtherReads(void *resultv, void *countv) {
   // TODO
-  pending_reads = 0;
+  int * result = resultv;
+  // printf("whose value is %d\n", *result);
+  int * count = countv;
+  * count = ((* count) - 1);
+  // printf("read # %d from block #%d ", *count, *result);
+  if (*count == 0) {
+    // end
+    finished_last_read = 1;
+  } else {
+    void (*handler) (void*, void*) = handleOtherReads;
+    queue_enqueue (pending_read_queue, result, count, handler);
+    disk_schedule_read (result, * result);
+  }
 }
 
 void handleFirstRead(void *resultv, void *countv) {
   // TODO
-  pending_reads = 0;
+  int * result = resultv;
+  int * count = countv;
+  *count = * result;
+  // printf("first result is = %d\n", *result);
+  void (*handler) (void*, void*) = handleOtherReads;
+  // printf("read # %d from block #%d ", *count, *result);
+  queue_enqueue (pending_read_queue, result, count, handler);
+  disk_schedule_read (result, *result);
 
 }
 
@@ -48,25 +68,14 @@ int main(int argc, char **argv) {
 
   // Start the Hunt
   // TODO
-  // get first value
-  int firstValue;
+  // printf("read first block = %d", starting_block_number);
   void (*handler) (void*, void*) = handleFirstRead;
-  pending_reads = 1;
-  queue_enqueue (pending_read_queue, &firstValue, NULL, handler);
-  disk_schedule_read (&firstValue, starting_block_number);
-  while (pending_reads);
+  finished_last_read = 0;
+  int count = 0;
+  int value  = 0;
+  queue_enqueue (pending_read_queue, &value, &count, handler);
+  disk_schedule_read (&value, starting_block_number);
+  while (!finished_last_read);
 
-  // get other values
-  int prevValue = firstValue;
-  int otherValue;
-  for (int i = 0; i < firstValue; i++) {
-    void (*handler) (void*, void*) = handleOtherReads;
-    pending_reads = 1;
-    queue_enqueue (pending_read_queue, &otherValue, NULL, handler);
-    disk_schedule_read (&otherValue, otherValue);
-    while (pending_reads);
-    prevValue = otherValue;
-  }
-
-  printf ("%d\n", otherValue); 
+  printf ("%d\n", value); 
 }
